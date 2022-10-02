@@ -29,11 +29,11 @@
             <Cursor fx:constant="HAND" />
          </cursor>
       </JFXButton>
-      <JFXTextField layoutX="22.0" layoutY="92.0" prefHeight="25.0" prefWidth="106.0" promptText="Customer ID" />
-      <JFXTextField layoutX="151.0" layoutY="92.0" prefHeight="25.0" prefWidth="135.0" promptText="Name" />
-      <JFXTextField layoutX="307.0" layoutY="92.0" prefHeight="25.0" prefWidth="127.0" promptText="Address" />
-      <JFXTextField layoutX="459.0" layoutY="92.0" prefHeight="25.0" prefWidth="118.0" promptText="Salary" />
-      <JFXButton layoutX="471.0" layoutY="148.0" prefHeight="25.0" prefWidth="106.0" style="-fx-background-color: #2980b9;" text="Save Customer" textFill="WHITE">
+      <JFXTextField fx:id="txtID" layoutX="22.0" layoutY="92.0" prefHeight="25.0" prefWidth="106.0" promptText="Customer ID" />
+      <JFXTextField fx:id="txtName" layoutX="151.0" layoutY="92.0" prefHeight="25.0" prefWidth="135.0" promptText="Name" />
+      <JFXTextField fx:id="txtAddress" layoutX="307.0" layoutY="92.0" prefHeight="25.0" prefWidth="127.0" promptText="Address" />
+      <JFXTextField fx:id="txtSalary" layoutX="459.0" layoutY="92.0" prefHeight="25.0" prefWidth="118.0" promptText="Salary" />
+      <JFXButton layoutX="471.0" layoutY="148.0" onAction="#saveCustomerOnAction" prefHeight="25.0" prefWidth="106.0" style="-fx-background-color: #2980b9;" text="Save Customer" textFill="WHITE">
          <cursor>
             <Cursor fx:constant="HAND" />
          </cursor>
