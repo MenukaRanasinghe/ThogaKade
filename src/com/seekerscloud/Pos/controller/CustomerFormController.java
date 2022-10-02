@@ -52,10 +52,17 @@ public class CustomerFormController {
         boolean isSaved=Database.customerTable.add(c1);
         if (isSaved){
             searchCustomers();
+            clearFields();
             new Alert(Alert.AlertType.INFORMATION,"Customer Saved !").show();
         }
         else {
             new Alert(Alert.AlertType.WARNING,"Try Again !").show();
         }
+    }
+    private void clearFields(){
+        txtID.clear();
+        txtName.clear();
+        txtAddress.clear();
+        txtSalary.clear();
     }
 }
