@@ -7,13 +7,11 @@ import com.seekerscloud.Pos.view.tm.CustomerTm;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 
 import java.util.Arrays;
+import java.util.Optional;
 
 public class CustomerFormController {
     public JFXTextField txtID;
@@ -43,6 +41,23 @@ public class CustomerFormController {
             Button btn=new Button("Delete");
             CustomerTm tm=new CustomerTm(c.getId(),c.getName(),c.getAddress(),c.getSalary(),btn);
             tmList.add(tm);
+
+            btn.setOnAction(event -> {
+                Alert alert=new Alert(Alert.AlertType.CONFIRMATION,"Are You Sure?", ButtonType.YES,ButtonType.NO);
+                Optional<ButtonType> buttonType = alert.showAndWait();
+                if (buttonType.get()==ButtonType.YES){
+                    boolean isDeleted=Database.customerTable.remove(c);
+                    if (isDeleted){
+                        searchCustomers();
+                        clearFields();
+                        new Alert(Alert.AlertType.INFORMATION,"Customer Deleted !").show();
+                    }
+                    else {
+                        new Alert(Alert.AlertType.WARNING,"Try Again !").show();
+                    }
+                }
+
+            });
         }
         tblCustomer.setItems(tmList);
     }
