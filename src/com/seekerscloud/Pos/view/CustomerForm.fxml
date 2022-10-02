@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXTextField?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.seekerscloud.Pos.controller.CustomerFormController">
+   <children>
+      <JFXButton layoutX="14.0" layoutY="23.0" style="-fx-background-color: #34495e;" text="Back to Home" textFill="WHITE">
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+      </JFXButton>
+      <Label layoutX="142.0" layoutY="18.0" text="Customer Form" textFill="#410cc6">
+         <font>
+            <Font name="System Bold" size="24.0" />
+         </font>
+      </Label>
+      <Separator layoutX="129.0" layoutY="50.0" prefHeight="5.0" prefWidth="330.0" />
+      <JFXButton layoutX="471.0" layoutY="23.0" style="-fx-background-color: #1abc9c;" text="+ New Customer" textFill="WHITE">
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+      </JFXButton>
+      <JFXTextField layoutX="22.0" layoutY="92.0" prefHeight="25.0" prefWidth="106.0" promptText="Customer ID" />
+      <JFXTextField layoutX="151.0" layoutY="92.0" prefHeight="25.0" prefWidth="135.0" promptText="Name" />
+      <JFXTextField layoutX="307.0" layoutY="92.0" prefHeight="25.0" prefWidth="127.0" promptText="Address" />
+      <JFXTextField layoutX="459.0" layoutY="92.0" prefHeight="25.0" prefWidth="118.0" promptText="Salary" />
+      <JFXButton layoutX="471.0" layoutY="148.0" prefHeight="25.0" prefWidth="106.0" style="-fx-background-color: #2980b9;" text="Save Customer" textFill="WHITE">
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+      </JFXButton>
+      <JFXTextField layoutX="22.0" layoutY="146.0" prefHeight="25.0" prefWidth="425.0" promptText="Search" />
+      <TableView layoutX="22.0" layoutY="192.0" prefHeight="190.0" prefWidth="558.0">
+        <columns>
+          <TableColumn prefWidth="88.0" text="ID" />
+          <TableColumn prefWidth="132.0" text="Name" />
+            <TableColumn prefWidth="138.0" text="Address" />
+            <TableColumn prefWidth="108.0" text="Salary" />
+            <TableColumn prefWidth="90.0" text="Options" />
+        </columns>
+      </TableView>
+   </children>
+</AnchorPane>
