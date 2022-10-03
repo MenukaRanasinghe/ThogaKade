@@ -10,7 +10,6 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-
 <AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.seekerscloud.Pos.controller.CustomerFormController">
    <children>
       <JFXButton layoutX="14.0" layoutY="23.0" style="-fx-background-color: #34495e;" text="Back to Home" textFill="WHITE">
@@ -33,12 +32,12 @@
       <JFXTextField fx:id="txtName" layoutX="151.0" layoutY="92.0" prefHeight="25.0" prefWidth="135.0" promptText="Name" />
       <JFXTextField fx:id="txtAddress" layoutX="307.0" layoutY="92.0" prefHeight="25.0" prefWidth="127.0" promptText="Address" />
       <JFXTextField fx:id="txtSalary" layoutX="459.0" layoutY="92.0" prefHeight="25.0" prefWidth="118.0" promptText="Salary" />
-      <JFXButton layoutX="471.0" layoutY="148.0" onAction="#saveCustomerOnAction" prefHeight="25.0" prefWidth="106.0" style="-fx-background-color: #2980b9;" text="Save Customer" textFill="WHITE">
+      <JFXButton fx:id="btnSaveCustomer" layoutX="450.0" layoutY="148.0" onAction="#saveCustomerOnAction" prefHeight="25.0" prefWidth="127.0" style="-fx-background-color: #2980b9;" text="Save Customer" textFill="WHITE">
          <cursor>
             <Cursor fx:constant="HAND" />
          </cursor>
       </JFXButton>
-      <JFXTextField layoutX="22.0" layoutY="146.0" prefHeight="25.0" prefWidth="425.0" promptText="Search" />
+      <JFXTextField layoutX="22.0" layoutY="146.0" prefHeight="25.0" prefWidth="407.0" promptText="Search" />
       <TableView fx:id="tblCustomer" layoutX="22.0" layoutY="192.0" prefHeight="190.0" prefWidth="558.0">
         <columns>
           <TableColumn fx:id="colID" prefWidth="88.0" text="ID" />
