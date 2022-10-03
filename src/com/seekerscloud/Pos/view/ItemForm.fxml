@@ -1,14 +1,52 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXTextField?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="com.seekerscloud.Pos.controller.ItemFormController"
-            prefHeight="400.0" prefWidth="600.0">
 
+<AnchorPane fx:id="itemFormContext" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.seekerscloud.Pos.controller.ItemFormController">
+   <children>
+      <JFXButton layoutX="17.0" layoutY="19.0" onAction="#backToHomeOnAction" style="-fx-background-color: #34495e;" text="Back to Home" textFill="WHITE">
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+      </JFXButton>
+      <Label layoutX="145.0" layoutY="14.0" text="Item Form" textFill="#410cc6">
+         <font>
+            <Font name="System Bold" size="24.0" />
+         </font>
+      </Label>
+      <Separator layoutX="132.0" layoutY="46.0" prefHeight="5.0" prefWidth="330.0" />
+      <JFXButton layoutX="474.0" layoutY="19.0" onAction="#newItemOnAction" style="-fx-background-color: #1abc9c;" text="+ New Item" textFill="WHITE">
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+      </JFXButton>
+      <JFXTextField fx:id="txtCode" layoutX="25.0" layoutY="88.0" prefHeight="25.0" prefWidth="106.0" promptText="Code" />
+      <JFXTextField fx:id="txtDescription" layoutX="154.0" layoutY="88.0" prefHeight="25.0" prefWidth="135.0" promptText="Description" />
+      <JFXTextField fx:id="txtUnitPrice" layoutX="310.0" layoutY="88.0" prefHeight="25.0" prefWidth="127.0" promptText="Unit Price" />
+      <JFXTextField fx:id="txtQtyOnHand" layoutX="462.0" layoutY="88.0" prefHeight="25.0" prefWidth="118.0" promptText="Qty on Hand" />
+      <JFXButton fx:id="btnSaveItem" layoutX="453.0" layoutY="144.0" onAction="#saveItemOnAction" prefHeight="25.0" prefWidth="127.0" style="-fx-background-color: #2980b9;" text="Save Item" textFill="WHITE">
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+      </JFXButton>
+      <JFXTextField fx:id="txtSearch" layoutX="25.0" layoutY="142.0" prefHeight="25.0" prefWidth="407.0" promptText="Search" />
+      <TableView fx:id="tblItem" layoutX="25.0" layoutY="188.0" prefHeight="190.0" prefWidth="558.0">
+         <columns>
+            <TableColumn fx:id="colCode" prefWidth="88.0" text="Code" />
+            <TableColumn fx:id="colDescription" prefWidth="132.0" text="Description" />
+            <TableColumn fx:id="colUnitPrice" prefWidth="138.0" text="Unit Price" />
+            <TableColumn fx:id="colQtyOnhand" prefWidth="108.0" text="Qty on Hand" />
+            <TableColumn fx:id="colOptions" prefWidth="90.0" text="Options" />
+         </columns>
+      </TableView>
+   </children>
 </AnchorPane>

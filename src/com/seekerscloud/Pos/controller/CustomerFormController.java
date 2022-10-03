@@ -8,9 +8,14 @@ import com.seekerscloud.Pos.view.tm.CustomerTm;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.AnchorPane;
+import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.Optional;
 
@@ -26,6 +31,10 @@ public class CustomerFormController {
     public TableColumn colSalary;
     public TableColumn colOptions;
     public JFXButton btnSaveCustomer;
+    public AnchorPane customerFormContext;
+    public JFXTextField txtSearch;
+
+    private String searchText="";
 
     public void initialize(){
         colID.setCellValueFactory(new PropertyValueFactory<>("id"));
@@ -34,10 +43,17 @@ public class CustomerFormController {
         colSalary.setCellValueFactory(new PropertyValueFactory<>("salary"));
         colOptions.setCellValueFactory(new PropertyValueFactory<>("btn"));
 
-        searchCustomers();
+        searchCustomers(searchText);
 
         tblCustomer.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-            setData(newValue);
+            if (newValue!=null){
+                setData(newValue);
+            }
+
+        });
+        txtSearch.textProperty().addListener((observable, oldValue, newValue) -> {
+            searchText=newValue;
+            searchCustomers(searchText);
         });
     }
     private void setData(CustomerTm tm){
@@ -47,30 +63,33 @@ public class CustomerFormController {
         txtSalary.setText(String.valueOf(tm.getSalary()));
         btnSaveCustomer.setText("Update Customer");
     }
-    private void searchCustomers(){
+    private void searchCustomers(String text){
         ObservableList<CustomerTm> tmList= FXCollections.observableArrayList();
         for (Customer c:Database.customerTable
              ) {
-            Button btn=new Button("Delete");
-            CustomerTm tm=new CustomerTm(c.getId(),c.getName(),c.getAddress(),c.getSalary(),btn);
-            tmList.add(tm);
+            if (c.getName().contains(text) || c.getAddress().contains(text)){
+                Button btn=new Button("Delete");
+                CustomerTm tm=new CustomerTm(c.getId(),c.getName(),c.getAddress(),c.getSalary(),btn);
+                tmList.add(tm);
 
-            btn.setOnAction(event -> {
-                Alert alert=new Alert(Alert.AlertType.CONFIRMATION,"Are You Sure?", ButtonType.YES,ButtonType.NO);
-                Optional<ButtonType> buttonType = alert.showAndWait();
-                if (buttonType.get()==ButtonType.YES){
-                    boolean isDeleted=Database.customerTable.remove(c);
-                    if (isDeleted){
-                        searchCustomers();
-                        clearFields();
-                        new Alert(Alert.AlertType.INFORMATION,"Customer Deleted !").show();
+                btn.setOnAction(event -> {
+                    Alert alert=new Alert(Alert.AlertType.CONFIRMATION,"Are You Sure?", ButtonType.YES,ButtonType.NO);
+                    Optional<ButtonType> buttonType = alert.showAndWait();
+                    if (buttonType.get()==ButtonType.YES){
+                        boolean isDeleted=Database.customerTable.remove(c);
+                        if (isDeleted){
+                            searchCustomers(searchText);
+                            clearFields();
+                            new Alert(Alert.AlertType.INFORMATION,"Customer Deleted !").show();
+                        }
+                        else {
+                            new Alert(Alert.AlertType.WARNING,"Try Again !").show();
+                        }
                     }
-                    else {
-                        new Alert(Alert.AlertType.WARNING,"Try Again !").show();
-                    }
-                }
 
-            });
+                });
+            }
+
         }
         tblCustomer.setItems(tmList);
     }
@@ -81,7 +100,7 @@ public class CustomerFormController {
         if (btnSaveCustomer.getText().equalsIgnoreCase("save customer")){
             boolean isSaved=Database.customerTable.add(c1);
             if (isSaved){
-                searchCustomers();
+                searchCustomers(searchText);
                 clearFields();
                 new Alert(Alert.AlertType.INFORMATION,"Customer Saved !").show();
             }
@@ -95,8 +114,9 @@ public class CustomerFormController {
                     Database.customerTable.get(i).setName(txtName.getText());
                     Database.customerTable.get(i).setAddress(txtAddress.getText());
                     Database.customerTable.get(i).setSalary(Double.parseDouble(txtSalary.getText()));
-                    searchCustomers();
+                    searchCustomers(searchText);
                     new Alert(Alert.AlertType.INFORMATION,"Customer Updated").show();
+                    clearFields();
                 }
             }
         }
@@ -108,5 +128,15 @@ public class CustomerFormController {
         txtName.clear();
         txtAddress.clear();
         txtSalary.clear();
+    }
+
+    public void backToHomeOnAction(ActionEvent actionEvent) throws IOException {
+        customerFormContext.getScene().getWindow();
+        Stage stage=(Stage) customerFormContext.getScene().getWindow();
+        stage.setScene(new Scene(FXMLLoader.load(getClass().getResource("../view/DashboardForm.fxml"))));
+    }
+
+    public void newCustomerOnAction(ActionEvent actionEvent) {
+        btnSaveCustomer.setText("Save Customer");
     }
 }
