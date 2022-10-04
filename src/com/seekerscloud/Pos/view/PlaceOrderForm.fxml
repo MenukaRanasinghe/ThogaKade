@@ -44,7 +44,7 @@
       <JFXTextField fx:id="txtDescription" editable="false" layoutX="138.0" layoutY="213.0" prefHeight="25.0" prefWidth="110.0" promptText="Description" />
       <JFXTextField fx:id="txtUnitPrice" editable="false" layoutX="272.0" layoutY="213.0" prefHeight="25.0" prefWidth="91.0" promptText="Unit Price" />
       <JFXTextField fx:id="txtQtyOnHand" editable="false" layoutX="384.0" layoutY="213.0" prefHeight="25.0" prefWidth="91.0" promptText="Qty On Hand" />
-      <JFXTextField layoutX="499.0" layoutY="213.0" prefHeight="25.0" prefWidth="80.0" promptText="Quantity" />
+      <JFXTextField fx:id="txtQuantity" layoutX="499.0" layoutY="213.0" prefHeight="25.0" prefWidth="80.0" promptText="Quantity" />
       <JFXButton layoutX="502.0" layoutY="252.0" onAction="#addTocartOnAction" style="-fx-background-color: #2980b9;" text="Add to Cart" textFill="WHITE">
          <cursor>
             <Cursor fx:constant="HAND" />
