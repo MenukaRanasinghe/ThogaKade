@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="501.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.seekerscloud.Pos.controller.PlaceOrderFormController">
+<AnchorPane fx:id="placeOrderFormContext" prefHeight="501.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.seekerscloud.Pos.controller.PlaceOrderFormController">
    <children>
       <JFXButton layoutX="22.0" layoutY="16.0" onAction="#backToHomeOnAction" style="-fx-background-color: #34495e;" text="Back to Home" textFill="WHITE">
          <cursor>
@@ -32,32 +32,32 @@
          </font>
       </Label>
       <JFXComboBox fx:id="cmbCustomerId" layoutX="22.0" layoutY="141.0" prefHeight="25.0" prefWidth="129.0" promptText="Customer ID" />
-      <JFXTextField editable="false" layoutX="177.0" layoutY="141.0" prefHeight="25.0" prefWidth="120.0" promptText="Name" />
-      <JFXTextField editable="false" layoutX="322.0" layoutY="141.0" prefHeight="25.0" prefWidth="129.0" promptText="Address" />
-      <JFXTextField editable="false" layoutX="470.0" layoutY="141.0" prefHeight="25.0" prefWidth="110.0" promptText="Salary" />
+      <JFXTextField fx:id="txtName" editable="false" layoutX="177.0" layoutY="141.0" prefHeight="25.0" prefWidth="120.0" promptText="Name" />
+      <JFXTextField fx:id="txtAddress" editable="false" layoutX="322.0" layoutY="141.0" prefHeight="25.0" prefWidth="129.0" promptText="Address" />
+      <JFXTextField fx:id="txtSalary" editable="false" layoutX="470.0" layoutY="141.0" prefHeight="25.0" prefWidth="110.0" promptText="Salary" />
       <Label layoutX="22.0" layoutY="188.0" text="Item Details" textFill="#410cc6">
          <font>
             <Font name="System Bold" size="16.0" />
          </font>
       </Label>
       <JFXComboBox fx:id="cmbItemId" layoutX="22.0" layoutY="213.0" prefHeight="25.0" prefWidth="91.0" promptText="Item Code" />
-      <JFXTextField editable="false" layoutX="138.0" layoutY="213.0" prefHeight="25.0" prefWidth="110.0" promptText="Description" />
-      <JFXTextField editable="false" layoutX="272.0" layoutY="213.0" prefHeight="25.0" prefWidth="91.0" promptText="Unit Price" />
-      <JFXTextField editable="false" layoutX="384.0" layoutY="213.0" prefHeight="25.0" prefWidth="91.0" promptText="Qty On Hand" />
+      <JFXTextField fx:id="txtDescription" editable="false" layoutX="138.0" layoutY="213.0" prefHeight="25.0" prefWidth="110.0" promptText="Description" />
+      <JFXTextField fx:id="txtUnitPrice" editable="false" layoutX="272.0" layoutY="213.0" prefHeight="25.0" prefWidth="91.0" promptText="Unit Price" />
+      <JFXTextField fx:id="txtQtyOnHand" editable="false" layoutX="384.0" layoutY="213.0" prefHeight="25.0" prefWidth="91.0" promptText="Qty On Hand" />
       <JFXTextField layoutX="499.0" layoutY="213.0" prefHeight="25.0" prefWidth="80.0" promptText="Quantity" />
-      <JFXButton layoutX="502.0" layoutY="252.0" onAction="#backToHomeOnAction" style="-fx-background-color: #2980b9;" text="Add to Cart" textFill="WHITE">
+      <JFXButton layoutX="502.0" layoutY="252.0" onAction="#addTocartOnAction" style="-fx-background-color: #2980b9;" text="Add to Cart" textFill="WHITE">
          <cursor>
             <Cursor fx:constant="HAND" />
          </cursor>
       </JFXButton>
-      <TableView layoutX="19.0" layoutY="292.0" prefHeight="154.0" prefWidth="561.0">
+      <TableView fx:id="tblCart" layoutX="19.0" layoutY="292.0" prefHeight="154.0" prefWidth="561.0">
         <columns>
-          <TableColumn prefWidth="75.0" text="Item Code" />
-          <TableColumn prefWidth="131.0" text="Description" />
-            <TableColumn prefWidth="85.0" text="Unit Price" />
-            <TableColumn prefWidth="86.0" text="Quantity" />
-            <TableColumn prefWidth="91.0" text="Total" />
-            <TableColumn prefWidth="92.0" text="Options" />
+          <TableColumn fx:id="colCode" prefWidth="75.0" text="Item Code" />
+          <TableColumn fx:id="colDescription" prefWidth="131.0" text="Description" />
+            <TableColumn fx:id="colUnitPrice" prefWidth="85.0" text="Unit Price" />
+            <TableColumn fx:id="colQuantity" prefWidth="86.0" text="Quantity" />
+            <TableColumn fx:id="colTotal" prefWidth="91.0" text="Total" />
+            <TableColumn fx:id="colOptions" prefWidth="92.0" text="Options" />
         </columns>
       </TableView>
       <Label layoutX="19.0" layoutY="462.0" text="Total" textFill="#c31117">
