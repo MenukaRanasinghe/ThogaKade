@@ -65,7 +65,7 @@
             <Font name="System Bold" size="16.0" />
          </font>
       </Label>
-      <Label layoutX="74.0" layoutY="462.0" text="0.00" textFill="#c31117">
+      <Label fx:id="lblTotal" layoutX="74.0" layoutY="462.0" text="0.00" textFill="#c31117">
          <font>
             <Font name="System Bold" size="16.0" />
          </font>

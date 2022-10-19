@@ -12,9 +12,7 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
@@ -22,6 +20,7 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Optional;
 
 public class PlaceOrderFormController {
     public JFXTextField txtDate;
@@ -42,6 +41,7 @@ public class PlaceOrderFormController {
     public TableColumn colTotal;
     public TableColumn colOptions;
     public JFXTextField txtQuantity;
+    public Label lblTotal;
 
     public void initialize() {
         colCode.setCellValueFactory(new PropertyValueFactory<>("code"));
@@ -121,8 +121,9 @@ public class PlaceOrderFormController {
 
         int row = isAlreadyExists(cmbItemId.getValue());
 
+
         if (row == -1) {
-            CartTm tm = new CartTm(
+           CartTm tm = new CartTm(
                     cmbItemId.getValue(),
                     txtDescription.getText(),
                     unitPrice,
@@ -140,9 +141,36 @@ public class PlaceOrderFormController {
             oblist.get(row).setTotal(tempTotal);
             tblCart.refresh();
         }
+        calculateTotal();
+        clearFields();
+        cmbItemId.requestFocus();
 
+        btn.setOnAction(event -> {
+            Alert alert=new Alert(Alert.AlertType.CONFIRMATION,"Are you sure",ButtonType.YES,ButtonType.NO);
+            Optional<ButtonType> buttonType=alert.showAndWait();
+
+            if (buttonType.get()==ButtonType.YES){
+                for (CartTm tm:oblist
+                     ) {
+                   if (tm.getCode().equals(tm.getCode())){
+                       oblist.remove(tm);
+                       calculateTotal();
+                       tblCart.refresh();
+                       return;
+                   }
+                }
+            }
+        });
 
     }
+
+    private void clearFields() {
+        txtDescription.clear();
+        txtUnitPrice.clear();
+        txtQtyOnHand.clear();
+        txtQuantity.clear();
+    }
+
 
     private int isAlreadyExists(String code) {
         for (int i = 0; i < oblist.size(); i++) {
@@ -152,6 +180,14 @@ public class PlaceOrderFormController {
 
         }
         return -1;
+    }
+    private void calculateTotal(){
+        double total=0.00;
+        for (CartTm tm:oblist
+             ) {
+            total+=tm.getTotal();
+        }
+        lblTotal.setText(String.valueOf(total));
     }
 }
 
