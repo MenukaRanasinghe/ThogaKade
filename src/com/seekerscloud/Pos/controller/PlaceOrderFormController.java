@@ -5,6 +5,8 @@ import com.jfoenix.controls.JFXTextField;
 import com.seekerscloud.Pos.db.Database;
 import com.seekerscloud.Pos.modal.Customer;
 import com.seekerscloud.Pos.modal.Item;
+import com.seekerscloud.Pos.modal.ItemDetails;
+import com.seekerscloud.Pos.modal.Order;
 import com.seekerscloud.Pos.view.tm.CartTm;
 import com.seekerscloud.Pos.view.tm.ItemTm;
 import javafx.collections.FXCollections;
@@ -19,6 +21,7 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Optional;
 
@@ -42,6 +45,7 @@ public class PlaceOrderFormController {
     public TableColumn colOptions;
     public JFXTextField txtQuantity;
     public Label lblTotal;
+    public JFXTextField txtOrderId;
 
     public void initialize() {
         colCode.setCellValueFactory(new PropertyValueFactory<>("code"));
@@ -58,6 +62,7 @@ public class PlaceOrderFormController {
         txtDate.setText(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
         loadCustomerIds();
         loadItemIds();
+        setOrderId();
 
         cmbCustomerId.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
 
@@ -71,6 +76,18 @@ public class PlaceOrderFormController {
                 setItemDetails();
             }
         });
+    }
+
+    private void setOrderId() {
+        if (Database.orderTable.isEmpty()){
+            txtOrderId.setText("D-1");
+            return;
+        }
+        String tempOrderId=Database.orderTable.get(Database.orderTable.size()-1).getOrderId();  //D-3
+        String[] array=tempOrderId.split("-");  // [D,3]
+        int tempNumber=Integer.parseInt(array[1]);
+        int finalizeOrderId=tempNumber+1;
+        txtOrderId.setText("D-"+finalizeOrderId);
     }
 
     private void setItemDetails() {
@@ -188,6 +205,44 @@ public class PlaceOrderFormController {
             total+=tm.getTotal();
         }
         lblTotal.setText(String.valueOf(total));
+    }
+
+    public void placeOrderOnAction(ActionEvent actionEvent) {
+        if (oblist.isEmpty()) return;
+        ArrayList<ItemDetails> details=new ArrayList<>();
+        for (CartTm tm:oblist
+             ) {
+            details.add(new ItemDetails(tm.getCode(),tm.getUnitPrice(),tm.getQty()));
+        }
+        Order order=new Order(txtOrderId.getText(),new Date(),Double.parseDouble(lblTotal.getText()),cmbCustomerId.getValue(),details );
+        Database.orderTable.add(order);
+        manageQty();
+        clearAll();
+
+    }
+
+    private void manageQty() {
+        for (CartTm tm:oblist
+             ) {
+            for (Item i:Database.itemTable
+                 ) {
+               if (i.getCode().equals(tm.getCode())){
+                   i.setQtyOnHand(i.getQtyOnHand()-tm.getQty());
+                   break;
+               }
+            }
+        }
+    }
+
+    private void clearAll() {
+        oblist.clear();
+        calculateTotal();
+        txtName.clear();
+        txtAddress.clear();
+        txtSalary.clear();
+        clearFields();
+        cmbCustomerId.requestFocus();
+        setOrderId();
     }
 }
 
