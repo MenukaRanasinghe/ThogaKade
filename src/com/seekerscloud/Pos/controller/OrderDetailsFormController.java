@@ -7,6 +7,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
@@ -42,6 +43,22 @@ public class OrderDetailsFormController {
             Button btn=new Button("view more");
             OrderTm tm=new OrderTm(o.getOrderId(),o.getCustomer(),o.getDate(),o.getTotalCost(),btn);
             tmlist.add(tm);
+
+            btn.setOnAction(e->{
+
+                try {
+                    FXMLLoader loader=new FXMLLoader(getClass().getResource("../view/ItemDetailsForm.fxml"));
+                    Parent parent=loader.load();
+                    ItemDetailsFormController controller=loader.getController();
+                    controller.loadOrderDEtails(tm.getOrderId());
+                    Stage stage=new Stage();
+                    stage.setScene(new Scene(parent));
+                    stage.show();
+
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                }
+            } );
         }
         tblOrders.setItems(tmlist);
     }
