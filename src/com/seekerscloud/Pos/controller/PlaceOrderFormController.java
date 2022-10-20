@@ -127,10 +127,29 @@ public class PlaceOrderFormController {
         Stage stage = (Stage) placeOrderFormContext.getScene().getWindow();
         stage.setScene(new Scene(FXMLLoader.load(getClass().getResource("../view/DashboardForm.fxml"))));
     }
-
+private boolean checkQty(String code,int qty){
+    for (Item i:Database.itemTable
+         ) {
+       if (code.equals(i.getCode())){
+           if (i.getQtyOnHand()>=qty){
+               return true;
+           }
+           else {
+               return false;
+           }
+       }
+    }
+    return false;
+}
     ObservableList<CartTm> oblist = FXCollections.observableArrayList();
 
     public void addTocartOnAction(ActionEvent actionEvent) {
+
+        if (!checkQty(cmbItemId.getValue(),Integer.parseInt(txtQuantity.getText()))){
+            new Alert(Alert.AlertType.WARNING,"invalid qty").show();
+            return;
+        }
+
         double unitPrice = Double.parseDouble(txtUnitPrice.getText());
         int qty = Integer.parseInt(txtQuantity.getText());
         double total = unitPrice * qty;
@@ -154,6 +173,12 @@ public class PlaceOrderFormController {
         } else {
             int tempQty = oblist.get(row).getQty() + qty;
             double tempTotal = unitPrice + tempQty;
+
+            if (!checkQty(cmbItemId.getValue(),tempQty)){
+                new Alert(Alert.AlertType.WARNING,"invalid qty").show();
+                return;
+            }
+
             oblist.get(row).setQty(tempQty);
             oblist.get(row).setTotal(tempTotal);
             tblCart.refresh();
