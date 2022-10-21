@@ -16,6 +16,10 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.Arrays;
 import java.util.Optional;
 
@@ -94,12 +98,24 @@ public class CustomerFormController {
         tblCustomer.setItems(tmList);
     }
 
-    public void saveCustomerOnAction(ActionEvent actionEvent) {
+    public void saveCustomerOnAction(ActionEvent actionEvent) throws ClassNotFoundException, SQLException {
         Customer c1=new Customer(txtID.getText(),txtName.getText(),txtAddress.getText(),Double.parseDouble(txtSalary.getText()));
 
         if (btnSaveCustomer.getText().equalsIgnoreCase("save customer")){
-            boolean isSaved=Database.customerTable.add(c1);
-            if (isSaved){
+
+            //database
+            //step1---driver load to ram
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            //step2---create connection
+            Connection connection=DriverManager.getConnection("jdbc:mysql://localhost:3306/Thogakade","root","1234");
+            //step3---create statement
+            Statement statement=connection.createStatement();
+            //step4---create query
+            String sql="insert into Customer values('"+c1.getId()+"','"+c1.getName()+"','"+c1.getAddress()+"','"+c1.getSalary()+"')";
+            //step5---statement execute
+            int isSaved= statement.executeUpdate(sql);
+
+            if (isSaved>0){
                 searchCustomers(searchText);
                 clearFields();
                 new Alert(Alert.AlertType.INFORMATION,"Customer Saved !").show();
