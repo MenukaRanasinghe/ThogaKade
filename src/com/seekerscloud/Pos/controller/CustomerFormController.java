@@ -72,11 +72,16 @@ public class CustomerFormController {
     }
     private void searchCustomers(String text) throws ClassNotFoundException, SQLException {
 
+        String searchText="%"+text+"%";
+
+
         ObservableList<CustomerTm> tmList= FXCollections.observableArrayList();
         Class.forName("com.mysql.cj.jdbc.Driver");
         Connection connection=DriverManager.getConnection("jdbc:mysql://localhost:3306/Thogakade","root","1234");
-        String sql="select * from Customer";
+        String sql="select * from Customer where name like ? || address like ? ";
         PreparedStatement statement=connection.prepareStatement(sql);
+        statement.setString(1,searchText);
+        statement.setString(2,searchText);
         ResultSet set=statement.executeQuery();
 
         while (set.next()){
@@ -84,22 +89,45 @@ public class CustomerFormController {
                 CustomerTm tm=new CustomerTm(set.getString(1),set.getString(2),set.getString(3),set.getDouble(4),btn);
                 tmList.add(tm);
 
-                /*btn.setOnAction(event -> {
+                btn.setOnAction(event -> {
                     Alert alert=new Alert(Alert.AlertType.CONFIRMATION,"Are You Sure?", ButtonType.YES,ButtonType.NO);
                     Optional<ButtonType> buttonType = alert.showAndWait();
                     if (buttonType.get()==ButtonType.YES){
-                        boolean isDeleted=Database.customerTable.remove(c);
-                        if (isDeleted){
-                            searchCustomers(searchText);
-                            clearFields();
-                            new Alert(Alert.AlertType.INFORMATION,"Customer Deleted !").show();
+
+                        try {
+                            Class.forName("com.mysql.cj.jdbc.Driver");
+                            Connection connection1=DriverManager.getConnection("jdbc:mysql://localhost:3306/Thogakade","root","1234");
+                            String sql1="delete from Customer where id=?";
+                            PreparedStatement statement1=connection1.prepareStatement(sql1);
+                            statement1.setString(1,tm.getId());
+
+                            if (statement1.executeUpdate()>0){
+                                try {
+                                    searchCustomers(searchText);
+                                } catch (ClassNotFoundException e) {
+                                    throw new RuntimeException(e);
+                                } catch (SQLException e) {
+                                    throw new RuntimeException(e);
+                                }
+                                clearFields();
+                                new Alert(Alert.AlertType.INFORMATION,"Customer Deleted !").show();
+                            }
+                            else {
+                                new Alert(Alert.AlertType.WARNING,"Try Again !").show();
+                            }
+
+                        } catch (ClassNotFoundException e) {
+                            throw new RuntimeException(e);
+                        } catch (SQLException e) {
+                            throw new RuntimeException(e);
                         }
-                        else {
-                            new Alert(Alert.AlertType.WARNING,"Try Again !").show();
-                        }
+
+
+                      //  boolean isDeleted=Database.customerTable.remove(c);
+
                     }
 
-                });*/
+                });
         }
             tblCustomer.setItems(tmList);
 
@@ -135,7 +163,7 @@ public class CustomerFormController {
             //step5---statement execute
           //  int isSaved= statement.executeUpdate(sql);
 
-            if (statement.executeUpdate(sql)>0){
+            if (statement.executeUpdate()>0){
                 searchCustomers(searchText);
                 clearFields();
                 new Alert(Alert.AlertType.INFORMATION,"Customer Saved !").show();
@@ -145,7 +173,24 @@ public class CustomerFormController {
             }
         }
         else {
-            for (int i = 0; i < Database.customerTable.size(); i++) {
+
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            Connection connection=DriverManager.getConnection("jdbc:mysql://localhost:3306/Thogakade","root","1234");
+            String sql="update Customer set name=?,address=?,salary=? where id=?";
+            PreparedStatement statement=connection.prepareStatement(sql);
+            statement.setString(1,c1.getName());
+            statement.setString(2,c1.getAddress());
+            statement.setDouble(3,c1.getSalary());
+            statement.setString(4,c1.getId());
+            if (statement.executeUpdate()>0){
+                searchCustomers(searchText);
+                clearFields();
+                new Alert(Alert.AlertType.INFORMATION,"Customer Updated !").show();
+            }
+            else {
+                new Alert(Alert.AlertType.WARNING,"Try Again !").show();
+            }
+            /*for (int i = 0; i < Database.customerTable.size(); i++) {
                 if (txtID.getText().equalsIgnoreCase(Database.customerTable.get(i).getId())){
                     Database.customerTable.get(i).setName(txtName.getText());
                     Database.customerTable.get(i).setAddress(txtAddress.getText());
@@ -154,7 +199,7 @@ public class CustomerFormController {
                     new Alert(Alert.AlertType.INFORMATION,"Customer Updated").show();
                     clearFields();
                 }
-            }
+            }*/
         }
 
 
