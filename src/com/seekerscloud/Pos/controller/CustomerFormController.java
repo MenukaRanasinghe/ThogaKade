@@ -37,7 +37,7 @@ public class CustomerFormController {
 
     private String searchText="";
 
-    public void initialize(){
+    public void initialize() throws SQLException, ClassNotFoundException {
         colID.setCellValueFactory(new PropertyValueFactory<>("id"));
         colName.setCellValueFactory(new PropertyValueFactory<>("name"));
         colAddress.setCellValueFactory(new PropertyValueFactory<>("address"));
@@ -54,7 +54,13 @@ public class CustomerFormController {
         });
         txtSearch.textProperty().addListener((observable, oldValue, newValue) -> {
             searchText=newValue;
-            searchCustomers(searchText);
+            try {
+                searchCustomers(searchText);
+            } catch (ClassNotFoundException e) {
+                throw new RuntimeException(e);
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
         });
     }
     private void setData(CustomerTm tm){
@@ -64,16 +70,21 @@ public class CustomerFormController {
         txtSalary.setText(String.valueOf(tm.getSalary()));
         btnSaveCustomer.setText("Update Customer");
     }
-    private void searchCustomers(String text){
+    private void searchCustomers(String text) throws ClassNotFoundException, SQLException {
+
         ObservableList<CustomerTm> tmList= FXCollections.observableArrayList();
-        for (Customer c:Database.customerTable
-             ) {
-            if (c.getName().contains(text) || c.getAddress().contains(text)){
+        Class.forName("com.mysql.cj.jdbc.Driver");
+        Connection connection=DriverManager.getConnection("jdbc:mysql://localhost:3306/Thogakade","root","1234");
+        String sql="select * from Customer";
+        PreparedStatement statement=connection.prepareStatement(sql);
+        ResultSet set=statement.executeQuery();
+
+        while (set.next()){
                 Button btn=new Button("Delete");
-                CustomerTm tm=new CustomerTm(c.getId(),c.getName(),c.getAddress(),c.getSalary(),btn);
+                CustomerTm tm=new CustomerTm(set.getString(1),set.getString(2),set.getString(3),set.getDouble(4),btn);
                 tmList.add(tm);
 
-                btn.setOnAction(event -> {
+                /*btn.setOnAction(event -> {
                     Alert alert=new Alert(Alert.AlertType.CONFIRMATION,"Are You Sure?", ButtonType.YES,ButtonType.NO);
                     Optional<ButtonType> buttonType = alert.showAndWait();
                     if (buttonType.get()==ButtonType.YES){
@@ -88,11 +99,17 @@ public class CustomerFormController {
                         }
                     }
 
-                });
-            }
-
+                });*/
         }
-        tblCustomer.setItems(tmList);
+            tblCustomer.setItems(tmList);
+
+      /*  ObservableList<CustomerTm> tmList= FXCollections.observableArrayList();
+        for (Customer c:Database.customerTable
+             ) {
+
+
+        }*/
+
     }
 
     public void saveCustomerOnAction(ActionEvent actionEvent) throws ClassNotFoundException, SQLException {
