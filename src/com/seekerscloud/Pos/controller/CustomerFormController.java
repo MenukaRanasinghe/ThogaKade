@@ -16,10 +16,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.Arrays;
 import java.util.Optional;
 
@@ -108,14 +105,20 @@ public class CustomerFormController {
             Class.forName("com.mysql.cj.jdbc.Driver");
             //step2---create connection
             Connection connection=DriverManager.getConnection("jdbc:mysql://localhost:3306/Thogakade","root","1234");
+            String sql="insert into Customer values(?,?,?,?)";
+            PreparedStatement statement=connection.prepareStatement(sql);
+            statement.setString(1,c1.getId());
+            statement.setString(2,c1.getName());
+            statement.setString(3,c1.getAddress());
+            statement.setDouble(4,c1.getSalary());
             //step3---create statement
-            Statement statement=connection.createStatement();
+           // Statement statement=connection.createStatement();
             //step4---create query
-            String sql="insert into Customer values('"+c1.getId()+"','"+c1.getName()+"','"+c1.getAddress()+"','"+c1.getSalary()+"')";
+           // String sql="insert into Customer values('"+c1.getId()+"','"+c1.getName()+"','"+c1.getAddress()+"','"+c1.getSalary()+"')";
             //step5---statement execute
-            int isSaved= statement.executeUpdate(sql);
+          //  int isSaved= statement.executeUpdate(sql);
 
-            if (isSaved>0){
+            if (statement.executeUpdate(sql)>0){
                 searchCustomers(searchText);
                 clearFields();
                 new Alert(Alert.AlertType.INFORMATION,"Customer Saved !").show();
