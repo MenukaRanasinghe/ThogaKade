@@ -14,4 +14,19 @@ create table if not exists Customer(
 #==========
 desc customer;
 select * from customer;
+create table if not exists Item(
+    code varchar(45),
+    description varchar(45),
+    unitPrice double,
+    qtyOnHand int,
+    constraint primary key (code)
+);
+desc Item;
+select * from Item;
+
+create table if not exists Order(
+    orderId varchar(45),
+    date varchar(250),
+
+);
 

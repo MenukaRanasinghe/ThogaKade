@@ -20,6 +20,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.sql.*;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -111,15 +112,56 @@ public class PlaceOrderFormController {
     }
 
     private void loadItemIds() {
-        for (Item i : Database.itemTable) {
-            cmbItemId.getItems().add(i.getCode());
+
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            Connection connection=DriverManager.getConnection("jdbc:mysql://localhost:3306/Thogakade","root","1234");
+            String sql="select code from Item";
+            PreparedStatement statement=connection.prepareStatement(sql);
+            ResultSet set=statement.executeQuery();
+
+            ArrayList<String> codeList=new ArrayList<>();
+            while (set.next()){
+                codeList.add(set.getString(1));
+            }
+            ObservableList<String> obList=FXCollections.observableArrayList(codeList);
+            cmbItemId.setItems(obList);
+
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
+
+       /* for (Item i : Database.itemTable) {
+            cmbItemId.getItems().add(i.getCode());
+        }*/
     }
 
     private void loadCustomerIds() {
-        for (Customer c : Database.customerTable) {
-            cmbCustomerId.getItems().add(c.getId());
+
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            Connection connection= DriverManager.getConnection("jdbc:mysql://localhost:3306/Thogakade","root","1234");
+            String sql="select id from Customer";
+            PreparedStatement statement=connection.prepareStatement(sql);
+            ResultSet set=statement.executeQuery();
+
+            ArrayList<String> idList=new ArrayList<>();
+            while (set.next()){
+                idList.add(set.getString(1));
+
+            }
+            ObservableList<String> obList=FXCollections.observableArrayList(idList);
+            cmbCustomerId.setItems(obList);
         }
+        catch (SQLException | ClassNotFoundException e){
+            e.printStackTrace();
+        }
+
+       /* for (Customer c : Database.customerTable) {
+            cmbCustomerId.getItems().add(c.getId());
+        }*/
     }
 
     public void backToHomeOnAction(ActionEvent actionEvent) throws IOException {
