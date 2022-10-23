@@ -92,16 +92,53 @@ public class PlaceOrderFormController {
     }
 
     private void setItemDetails() {
-        for (Item i : Database.itemTable) {
-            if (i.getCode().equals(cmbItemId.getValue())) {
-                txtDescription.setText(i.getDescription());
-                txtUnitPrice.setText(String.valueOf(i.getUnitPrice()));
-                txtQtyOnHand.setText(String.valueOf(i.getQtyOnHand()));
+
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            Connection connection=DriverManager.getConnection("jdbc:mysql://localhost:3306/Thogakade","root","1234");
+            String sql="select * from Item where code=?";
+            PreparedStatement statement=connection.prepareStatement(sql);
+            statement.setString(1,cmbItemId.getValue());
+            ResultSet set=statement.executeQuery();
+
+            if (set.next()) {
+                txtDescription.setText(set.getString(2));
+                txtUnitPrice.setText(set.getString(3));
+                txtQtyOnHand.setText(set.getString(4));
+
             }
+
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
+
+
     }
 
     private void setCustomerDetails() {
+
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            Connection connection=DriverManager.getConnection("jdbc:mysql://localhost:3306/Thogakade","root","1234");
+            String sql="select * from Customer where id=?";
+            PreparedStatement statement=connection.prepareStatement(sql);
+            statement.setString(1,cmbCustomerId.getValue());
+            ResultSet set=statement.executeQuery();
+            if (set.next()){
+               txtName.setText(set.getString(2));
+               txtAddress.setText(set.getString(3));
+               txtSalary.setText(set.getString(4));
+            }
+
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+
         for (Customer c : Database.customerTable) {
             if (c.getId().equals(cmbCustomerId.getValue())) {
                 txtName.setText(c.getName());
