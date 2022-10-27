@@ -2,6 +2,7 @@ package com.seekerscloud.Pos.controller;
 
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextField;
+import com.seekerscloud.Pos.db.DBConnection;
 import com.seekerscloud.Pos.db.Database;
 import com.seekerscloud.Pos.modal.Customer;
 import com.seekerscloud.Pos.modal.Item;
@@ -81,10 +82,8 @@ public class ItemFormController {
         if (btnSaveItem.getText().equalsIgnoreCase("save item")){
 
             try {
-                Class.forName("com.mysql.cj.jdbc.Driver");
-                Connection connection= DriverManager.getConnection("jdbc:mysql://localhost:3306/Thogakade","root","1234");
                 String sql="insert into Item values (?,?,?,?)";
-                PreparedStatement statement=connection.prepareStatement(sql);
+                PreparedStatement statement= DBConnection.getInstance().getConnection().prepareStatement(sql);
                 statement.setString(1,i1.getCode());
                 statement.setString(2,i1.getDescription());
                 statement.setDouble(3,i1.getUnitPrice());
@@ -117,10 +116,8 @@ public class ItemFormController {
         else {
 
             try {
-                Class.forName("com.mysql.cj.jdbc.Driver");
-                Connection connection=DriverManager.getConnection("jdbc:mysql://localhost:3306/Thogakade","root","1234");
                 String sql="update Item set description=?,unitPrice=?,qtyOnHand=? where code=?";
-                PreparedStatement statement=connection.prepareStatement(sql);
+                PreparedStatement statement=DBConnection.getInstance().getConnection().prepareStatement(sql);
                 statement.setString(1,i1.getDescription());
                 statement.setDouble(2,i1.getUnitPrice());
                 statement.setInt(3,i1.getQtyOnHand());
@@ -157,10 +154,8 @@ public class ItemFormController {
         try {
         ObservableList<ItemTm> tmList= FXCollections.observableArrayList();
 
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            Connection connection=DriverManager.getConnection("jdbc:mysql://localhost:3306/Thogakade","root","1234");
             String sql="select * from Item where description like ?";
-            PreparedStatement statement=connection.prepareStatement(sql);
+            PreparedStatement statement=DBConnection.getInstance().getConnection().prepareStatement(sql);
             statement.setString(1,searchText);
             ResultSet set=statement.executeQuery();
 
@@ -175,10 +170,8 @@ public class ItemFormController {
                     if (buttonType.get()==ButtonType.YES){
 
                         try {
-                            Class.forName("com.mysql.cj.jdbc.Driver");
-                            Connection connection1=DriverManager.getConnection("jdbc:mysql://localhost:3306/Thogakade","root","1234");
                             String sql1="delete from Item where code=?";
-                            PreparedStatement statement1=connection1.prepareStatement(sql1);
+                            PreparedStatement statement1=DBConnection.getInstance().getConnection().prepareStatement(sql1);
                             statement1.setString(1,tm.getCode());
 
                             if (statement1.executeUpdate()>0){
