@@ -154,9 +154,9 @@ public class ItemFormController {
     private void searchItems(String text){
 
         String searchText="%"+text+"%";
-
-        ObservableList<ItemTm> tmList= FXCollections.observableArrayList();
         try {
+        ObservableList<ItemTm> tmList= FXCollections.observableArrayList();
+
             Class.forName("com.mysql.cj.jdbc.Driver");
             Connection connection=DriverManager.getConnection("jdbc:mysql://localhost:3306/Thogakade","root","1234");
             String sql="select * from Item where description like ?";
@@ -190,22 +190,16 @@ public class ItemFormController {
                                 new Alert(Alert.AlertType.WARNING,"Try Again !").show();
                             }
 
-                        } catch (ClassNotFoundException e) {
-                            throw new RuntimeException(e);
-                        } catch (SQLException e) {
-                            throw new RuntimeException(e);
+                        } catch (ClassNotFoundException | SQLException e) {
+                            e.printStackTrace();
                         }
-
-
                     }
-
                 });
             }
+            tblItem.setItems(tmList);
 
-        } catch (ClassNotFoundException e) {
-            throw new RuntimeException(e);
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
+        } catch (ClassNotFoundException | SQLException e) {
+           e.printStackTrace();
         }
 
        /* for (Item i:Database.itemTable
@@ -234,6 +228,6 @@ public class ItemFormController {
             }
 
         }*/
-        tblItem.setItems(tmList);
+
     }
 }

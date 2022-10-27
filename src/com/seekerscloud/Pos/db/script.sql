@@ -24,9 +24,30 @@ create table if not exists Item(
 desc Item;
 select * from Item;
 
-create table if not exists Order(
+create table if not exists orders(
     orderId varchar(45),
     date varchar(250),
+    totalCost double,
+    customer varchar(45),
+    constraint primary key (orderId),
+    constraint foreign key (customer) references Customer(id) on DELETE cascade on UPDATE cascade
 
 );
+use Thogakade;
+show tables ;
+select * from orders;
+delete from orders where orderId='D-1';
+
+create table if not exists orders_details(
+  itemCode varchar(45),
+  orderId varchar(45),
+  unitPrice double,
+  qty int,
+  constraint primary key (itemCode,orderId),
+  constraint foreign key (itemCode) references Item(code) on DELETE cascade on UPDATE cascade ,
+  constraint foreign key (orderId) references orders(orderId) on delete cascade on UPDATE cascade
+);
+select * from Item;
+select * from orders_details;
+
 
