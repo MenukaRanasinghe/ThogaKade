@@ -1,5 +1,6 @@
 package com.seekerscloud.Pos.controller;
 
+import com.seekerscloud.Pos.db.DBConnection;
 import com.seekerscloud.Pos.db.Database;
 import com.seekerscloud.Pos.modal.Order;
 import com.seekerscloud.Pos.view.tm.OrderTm;
@@ -17,6 +18,10 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.sql.Date;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 public class OrderDetailsFormController {
     public AnchorPane orderDetailsContext;
@@ -37,10 +42,47 @@ public class OrderDetailsFormController {
     }
 
     private void loadOrders() {
-        ObservableList<OrderTm> tmlist= FXCollections.observableArrayList();
+
+        try {
+            String sql="select * from orders ";
+            PreparedStatement statement= DBConnection.getInstance().getConnection().prepareStatement(sql);
+            ResultSet set=statement.executeQuery();
+
+            ObservableList<OrderTm> tmlist= FXCollections.observableArrayList();
+            while (set.next()){
+                Button btn=new Button("view more");
+                OrderTm tm=new OrderTm(set.getString(1),
+                        set.getString(4),
+                        set.getDate(2),
+                        set.getDouble(3),btn);
+                tmlist.add(tm);
+
+                btn.setOnAction(e->{
+
+                    try {
+                        FXMLLoader loader=new FXMLLoader(getClass().getResource("../view/ItemDetailsForm.fxml"));
+                        Parent parent=loader.load();
+                        ItemDetailsFormController controller=loader.getController();
+                        controller.loadOrderDEtails(tm.getOrderId());
+                        Stage stage=new Stage();
+                        stage.setScene(new Scene(parent));
+                        stage.show();
+
+                    } catch (IOException ex) {
+                        throw new RuntimeException(ex);
+                    }
+                } );
+            }
+            tblOrders.setItems(tmlist);
+        }
+        catch (SQLException | ClassNotFoundException e){
+            e.printStackTrace();
+        }
+
+       /* ObservableList<OrderTm> tmlist= FXCollections.observableArrayList();
         for (Order o: Database.orderTable
              ) {
-            Button btn=new Button("view more");
+            *//*Button btn=new Button("view more");
             OrderTm tm=new OrderTm(o.getOrderId(),o.getCustomer(),o.getDate(),o.getTotalCost(),btn);
             tmlist.add(tm);
 
@@ -58,9 +100,9 @@ public class OrderDetailsFormController {
                 } catch (IOException ex) {
                     throw new RuntimeException(ex);
                 }
-            } );
+            } );*//*
         }
-        tblOrders.setItems(tmlist);
+        tblOrders.setItems(tmlist);*/
     }
 
     public void backToHomeOnAction(ActionEvent actionEvent) throws IOException {

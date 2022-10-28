@@ -9,6 +9,7 @@ import com.seekerscloud.Pos.modal.Item;
 import com.seekerscloud.Pos.modal.ItemDetails;
 import com.seekerscloud.Pos.modal.Order;
 import com.seekerscloud.Pos.view.tm.CartTm;
+import com.seekerscloud.Pos.view.tm.ItemDetailsTm;
 import com.seekerscloud.Pos.view.tm.ItemTm;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -360,9 +361,13 @@ private boolean checkQty(String code,int qty){
         }
         Order order=new Order(txtOrderId.getText(),new Date(),Double.parseDouble(lblTotal.getText()),cmbCustomerId.getValue(),details );
 
+        Connection con=null;
         try {
+            con=DBConnection.getInstance().getConnection();
+            con.setAutoCommit(false);
+
             String sql="insert into orders values(?,?,?,?)";
-            PreparedStatement statement=DBConnection.getInstance().getConnection().prepareStatement(sql);
+            PreparedStatement statement=con.prepareStatement(sql);
             statement.setString(1,order.getOrderId());
             statement.setString(2,txtDate.getText());
             statement.setDouble(3,order.getTotalCost());
@@ -374,20 +379,32 @@ private boolean checkQty(String code,int qty){
                 //update qty,manage qty
                boolean isAllUpdated= manageQty(details);
                if (isAllUpdated){
+                   con.commit();
                    new Alert(Alert.AlertType.CONFIRMATION,"Order Placed").show();
                    clearAll();
                }
                else {
+                   con.setAutoCommit(true);
+                   con.rollback();
                    new Alert(Alert.AlertType.WARNING,"Try Again").show();
                }
             }
             else {
+                con.setAutoCommit(true);
+                con.rollback();
                 new Alert(Alert.AlertType.WARNING,"Try Again !").show();
             }
 
         }
         catch (SQLException | ClassNotFoundException e){
             e.printStackTrace();
+        }
+        finally {
+            try {
+                con.setAutoCommit(true);
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
         }
 
        /* Database.orderTable.add(order);

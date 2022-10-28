@@ -36,7 +36,7 @@ create table if not exists orders(
 use Thogakade;
 show tables ;
 select * from orders;
-delete from orders where orderId='D-1';
+delete from orders where orderId='D-10';
 
 create table if not exists orders_details(
   itemCode varchar(45),
@@ -49,5 +49,6 @@ create table if not exists orders_details(
 );
 select * from Item;
 select * from orders_details;
+
 
 
