@@ -49,6 +49,8 @@ create table if not exists orders_details(
 );
 select * from Item;
 select * from orders_details;
+delete  from orders_details where itemCode="i2";
+delete  from orders where customer="c003";
 
 
 
